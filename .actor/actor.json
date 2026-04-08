@@ -1,0 +1,15 @@
+{
+    "actorSpecification": 1,
+    "name": "bidscout-federal-contracts",
+    "version": "1.0",
+    "buildTag": "latest",
+    "minMemoryMbytes": 256,
+    "maxMemoryMbytes": 4096,
+    "usesStandbyMode": true,
+    "dockerfile": "../Dockerfile",
+    "readme": "./ACTOR.md",
+    "input": "./INPUT_SCHEMA.json",
+    "storages": {
+        "dataset": "./DATASET_SCHEMA.json"
+    }
+}

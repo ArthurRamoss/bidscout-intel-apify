@@ -1,0 +1,38 @@
+{
+  "name": "bidscout-intel-apify",
+  "version": "1.0.0",
+  "description": "Apify Actor that transforms federal government contract data into competitive intelligence. Incumbent detection, opportunity search, and competitive landscape analysis via USASpending and SAM.gov.",
+  "type": "module",
+  "main": "dist/server.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "dev": "tsx watch src/server.ts"
+  },
+  "keywords": [
+    "apify",
+    "actor",
+    "federal-contracts",
+    "govtech",
+    "incumbent-detection",
+    "usaspending",
+    "sam-gov",
+    "government-contracting"
+  ],
+  "author": "Ramos",
+  "license": "MIT",
+  "dependencies": {
+    "apify": "^3.0.0",
+    "dotenv": "^17.3.1",
+    "express": "^4.21.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.19.13",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

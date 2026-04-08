@@ -1,0 +1,88 @@
+{
+    "title": "BidScout Federal Contracts Intelligence",
+    "description": "Analyze federal procurement opportunities, detect incumbent contractors, and map competitive landscapes using USASpending and SAM.gov data.",
+    "type": "object",
+    "schemaVersion": 1,
+    "properties": {
+        "action": {
+            "title": "Action",
+            "type": "string",
+            "description": "Which analysis to run",
+            "editor": "select",
+            "enum": ["search_opportunities", "detect_incumbents", "competitive_landscape"],
+            "enumTitles": [
+                "Search Federal Opportunities (SAM.gov)",
+                "Detect Incumbent Contractors (USASpending)",
+                "Analyze Competitive Landscape (USASpending)"
+            ],
+            "default": "search_opportunities"
+        },
+        "keyword": {
+            "title": "Keyword",
+            "type": "string",
+            "description": "Search term for opportunity titles or contract descriptions (e.g. 'cybersecurity', 'cloud migration')",
+            "editor": "textfield",
+            "prefill": "cybersecurity"
+        },
+        "naicsCode": {
+            "title": "NAICS Code",
+            "type": "string",
+            "description": "6-digit NAICS industry code (e.g. '541512' for Computer Systems Design)",
+            "editor": "textfield",
+            "prefill": "541512"
+        },
+        "agency": {
+            "title": "Agency Filter",
+            "type": "string",
+            "description": "Federal agency name to filter results",
+            "editor": "textfield"
+        },
+        "setAside": {
+            "title": "Set-Aside Type",
+            "type": "string",
+            "description": "Filter by set-aside (small business programs)",
+            "editor": "select",
+            "enum": ["", "SBA", "8A", "WOSB", "SDVOSBC", "HZC"],
+            "enumTitles": [
+                "Any",
+                "Small Business (SBA)",
+                "8(a) Program",
+                "Women-Owned Small Business",
+                "Service-Disabled Veteran-Owned",
+                "HUBZone"
+            ],
+            "default": ""
+        },
+        "state": {
+            "title": "State",
+            "type": "string",
+            "description": "2-letter state code for place of performance (e.g. 'VA', 'CA')",
+            "editor": "textfield"
+        },
+        "postedWithinDays": {
+            "title": "Posted Within Days",
+            "type": "integer",
+            "description": "Only show opportunities posted within N days (for search_opportunities)",
+            "default": 30,
+            "minimum": 1,
+            "maximum": 365
+        },
+        "expiringWithinMonths": {
+            "title": "Expiring Within Months",
+            "type": "integer",
+            "description": "Look-ahead window for expiring contracts (for detect_incumbents)",
+            "default": 12,
+            "minimum": 1,
+            "maximum": 36
+        },
+        "lookbackYears": {
+            "title": "Lookback Years",
+            "type": "integer",
+            "description": "Years of historical data to analyze (for competitive_landscape)",
+            "default": 3,
+            "minimum": 1,
+            "maximum": 10
+        }
+    },
+    "required": ["action"]
+}
