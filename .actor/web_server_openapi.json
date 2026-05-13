@@ -1,0 +1,133 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "BidScout Federal Contracts Intelligence API",
+        "version": "1.1.0",
+        "description": "Federal contract intelligence via SAM.gov + USASpending. Each tool is billed per call. Also exposes a native MCP endpoint at POST /mcp for use with Claude Desktop, Cursor, and other MCP clients."
+    },
+    "servers": [
+        {
+            "url": "{ACTOR_STANDBY_URL}",
+            "description": "Apify Standby endpoint for this Actor",
+            "variables": {
+                "ACTOR_STANDBY_URL": {
+                    "default": "https://<actor-id>.apify.actor",
+                    "description": "Public Standby URL injected by Apify"
+                }
+            }
+        }
+    ],
+    "paths": {
+        "/": {
+            "get": {
+                "summary": "Status + route listing",
+                "responses": {
+                    "200": {
+                        "description": "Status JSON",
+                        "content": { "application/json": {} }
+                    }
+                }
+            }
+        },
+        "/tools": {
+            "get": {
+                "summary": "List available tools (mirrors MCP tools/list)",
+                "responses": {
+                    "200": {
+                        "description": "Tool catalog with input/output schemas and chargeEvent name",
+                        "content": { "application/json": {} }
+                    }
+                }
+            }
+        },
+        "/search": {
+            "post": {
+                "summary": "Search federal contract opportunities (SAM.gov)",
+                "x-apify-charge-event": "tool-call-search",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": ["keyword"],
+                                "properties": {
+                                    "keyword": { "type": "string", "example": "cybersecurity" },
+                                    "naicsCode": { "type": "string", "pattern": "^\\d{6}$", "example": "541512" },
+                                    "setAside": { "type": "string", "enum": ["", "SBA", "8A", "WOSB", "SDVOSBC", "HZC"] },
+                                    "agency": { "type": "string", "example": "Department of Defense" },
+                                    "state": { "type": "string", "minLength": 2, "maxLength": 2, "example": "VA" },
+                                    "postedWithinDays": { "type": "integer", "minimum": 1, "maximum": 365, "default": 30 }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": { "description": "Opportunities matching the search criteria" },
+                    "400": { "description": "Invalid input" },
+                    "402": { "description": "Budget cap reached" },
+                    "500": { "description": "Server error" }
+                }
+            }
+        },
+        "/incumbents": {
+            "post": {
+                "summary": "Detect incumbent contractors with expiring federal contracts",
+                "description": "Returns expiring contracts ranked by recompete probability score (0-100). The differentiator tool.",
+                "x-apify-charge-event": "tool-call-incumbents",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": ["naicsCode"],
+                                "properties": {
+                                    "naicsCode": { "type": "string", "pattern": "^\\d{6}$", "example": "541512" },
+                                    "agency": { "type": "string" },
+                                    "keyword": { "type": "string" },
+                                    "expiringWithinMonths": { "type": "integer", "minimum": 1, "maximum": 36, "default": 12 }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": { "description": "Expiring contracts + top incumbents + strategic insights" },
+                    "400": { "description": "Invalid input" },
+                    "402": { "description": "Budget cap reached" },
+                    "500": { "description": "Server error" }
+                }
+            }
+        },
+        "/landscape": {
+            "post": {
+                "summary": "Competitive landscape analysis (market size, top agencies, top contractors)",
+                "x-apify-charge-event": "tool-call-landscape",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": ["naicsCode"],
+                                "properties": {
+                                    "naicsCode": { "type": "string", "pattern": "^\\d{6}$", "example": "541512" },
+                                    "lookbackYears": { "type": "integer", "minimum": 1, "maximum": 10, "default": 3 },
+                                    "agencyFilter": { "type": "string" }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": { "description": "Competitive landscape briefing" },
+                    "400": { "description": "Invalid input" },
+                    "402": { "description": "Budget cap reached" },
+                    "500": { "description": "Server error" }
+                }
+            }
+        }
+    }
+}
