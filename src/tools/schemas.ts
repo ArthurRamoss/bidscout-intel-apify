@@ -30,7 +30,7 @@ export const SearchOpportunitiesArgs = z
       .default(30)
       .describe("Only return opportunities posted within N days"),
   })
-  .describe("Inputs for searching active federal contract opportunities on SAM.gov");
+  .describe("Inputs for searching active federal contract opportunities");
 
 export const DetectIncumbentsArgs = z
   .object({

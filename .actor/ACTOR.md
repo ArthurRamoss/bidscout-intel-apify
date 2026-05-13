@@ -1,16 +1,16 @@
 # BidScout Federal Contracts Intelligence
 
-Turn federal government contract data into actionable competitive intelligence. BidScout analyzes USASpending and SAM.gov to help government contractors find opportunities, identify incumbents, and map competitive landscapes.
+Turn federal government contract data into actionable competitive intelligence. BidScout aggregates and enriches authoritative federal procurement data so government contractors can find opportunities, identify incumbents, and map competitive landscapes — at a fraction of legacy provider pricing.
 
 This Actor runs as a **persistent HTTP API** (Standby mode) and **also speaks the Model Context Protocol** — connect it directly to Claude Desktop, Cursor, or any MCP client.
 
 ## What it does
 
 ### 1. Search Federal Opportunities — `tool-call-search`
-Searches active contract opportunities on SAM.gov including solicitations, presolicitations, sources sought, and award notices. Filter by keyword, NAICS code, set-aside type, agency, and state.
+Searches active federal contract opportunities. Filter by keyword, NAICS code, set-aside type, agency, and state.
 
 ### 2. Detect Incumbent Contractors — `tool-call-incumbents`
-Identifies current contractors with expiring federal contracts and calculates a **recompete probability score (0-100)** based on proximity to expiration, contract value, and duration. This is competitive intelligence that typically costs $25K/yr from GovWin.
+Identifies current contractors with expiring federal contracts and calculates a **proprietary recompete probability score (0-100)** based on proximity to expiration, contract value, and duration. This is competitive intelligence that typically costs $25K/yr from legacy providers like GovWin.
 
 ### 3. Analyze Competitive Landscape — `tool-call-landscape`
 Comprehensive market intelligence: total market size, top agencies by spend, top contractors by value won, expiring contracts summary, and strategic insights.
@@ -26,9 +26,9 @@ Comprehensive market intelligence: total market size, top agencies by spend, top
 
 | Event | Price | What you get |
 |---|---|---|
-| `tool-call-search` | **$0.03** | One SAM.gov opportunity search (1 API call) |
-| `tool-call-incumbents` | **$0.75** | One incumbent-detection run with recompete scoring (vs $25K/yr GovWin = ~1000× cheaper) |
-| `tool-call-landscape` | **$0.12** | One landscape briefing (3 parallel USASpending calls + aggregation) |
+| `tool-call-search` | **$0.03** | One federal opportunity search |
+| `tool-call-incumbents` | **$0.75** | One incumbent-detection run with proprietary recompete scoring (vs $25K/yr legacy = ~1000× cheaper) |
+| `tool-call-landscape` | **$0.12** | One landscape briefing with aggregated market intelligence |
 
 You can set `maxTotalChargeUsd` when starting a run; the Actor returns HTTP `402` (or an MCP error) once the cap is hit.
 
@@ -87,8 +87,3 @@ curl "https://<your-actor-id>.apify.actor/tools"
 ### Option C — Batch run (Apify Console / scheduled task)
 
 Use the Input form to pick an `action` and parameters. Results are pushed to the default dataset. Each batch run triggers the same Pay-Per-Event charge as a single HTTP call.
-
-## Data sources
-
-- **SAM.gov** — Federal procurement opportunities (geo-restricted to US IPs; daily cap ~1K requests, mitigated by the Apify proxy network)
-- **USASpending.gov** — Federal contract awards and spending data (no auth, generous rate limits)

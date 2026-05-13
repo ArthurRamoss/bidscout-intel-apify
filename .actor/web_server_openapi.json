@@ -3,7 +3,7 @@
     "info": {
         "title": "BidScout Federal Contracts Intelligence API",
         "version": "1.1.0",
-        "description": "Federal contract intelligence via SAM.gov + USASpending. Each tool is billed per call. Also exposes a native MCP endpoint at POST /mcp for use with Claude Desktop, Cursor, and other MCP clients."
+        "description": "Federal contract intelligence. Each tool is billed per call. Also exposes a native MCP endpoint at POST /mcp for use with Claude Desktop, Cursor, and other MCP clients."
     },
     "servers": [
         {
@@ -42,7 +42,7 @@
         },
         "/search": {
             "post": {
-                "summary": "Search federal contract opportunities (SAM.gov)",
+                "summary": "Search federal contract opportunities",
                 "x-apify-charge-event": "tool-call-search",
                 "requestBody": {
                     "required": true,

@@ -12,7 +12,7 @@ export const TOOLS = [
   {
     name: "search_federal_opportunities",
     description:
-      "Searches active federal contract opportunities on SAM.gov. Returns solicitations, presolicitations, sources sought, and award notices filtered by keyword, NAICS code, set-aside type, agency, and state. Results include contact information, deadlines, award details, and direct SAM.gov links. Output shape: { totalRecords, opportunities[], searchSummary, fetchedAt }.",
+      "Searches active federal contract opportunities. Returns solicitations, presolicitations, sources sought, and award notices filtered by keyword, NAICS code, set-aside type, agency, and state. Results include contact information, deadlines, award details, and direct source links. Output shape: { totalRecords, opportunities[], searchSummary, fetchedAt }.",
     _meta: {
       surface: "both",
       queryEligible: true,
@@ -25,7 +25,7 @@ export const TOOLS = [
         supportsBulk: false,
         recommendedBatchTools: [],
         notes:
-          "SAM.gov daily cap: 1,000 requests. Geo-restricted to US-based IPs. Use narrow keyword + NAICS filters to avoid wasting quota.",
+          "Use narrow keyword + NAICS filters for best results.",
       },
     },
     inputSchema: inputSchemaFor(ARG_SCHEMA.search_federal_opportunities),
@@ -39,7 +39,7 @@ export const TOOLS = [
           items: {
             type: "object",
             properties: {
-              noticeId: { type: "string", description: "SAM.gov unique notice identifier" },
+              noticeId: { type: "string", description: "Unique notice identifier" },
               title: { type: "string", description: "Opportunity title" },
               solicitationNumber: { type: "string", description: "Solicitation number" },
               agency: { type: "string", description: "Full agency hierarchy" },
@@ -74,7 +74,7 @@ export const TOOLS = [
                   title: { type: "string" },
                 },
               },
-              samLink: { type: "string", description: "Direct link to the opportunity on SAM.gov" },
+              samLink: { type: "string", description: "Direct link to the source opportunity record" },
               resourceLinks: { type: "array", items: { type: "string" } },
             },
             required: ["noticeId", "title", "agency", "postedDate", "type"],
@@ -90,7 +90,7 @@ export const TOOLS = [
   {
     name: "detect_incumbents",
     description:
-      "Given a NAICS code and optional agency filter, identifies current incumbent contractors with expiring federal contracts, calculates recompete probability scores (0-100), and provides strategic intelligence about upcoming recompete opportunities. This is the differentiator tool — competitive intelligence that typically costs $25K/yr from GovWin. Output shape: { query, totalContractsFound, totalValueUsd, expiringContracts[], topIncumbents[], strategicInsights[], fetchedAt }.",
+      "Given a NAICS code and optional agency filter, identifies current incumbent contractors with expiring federal contracts, calculates proprietary recompete probability scores (0-100), and provides strategic intelligence about upcoming recompete opportunities. This is the differentiator tool — competitive intelligence that typically costs $25K/yr from legacy providers. Output shape: { query, totalContractsFound, totalValueUsd, expiringContracts[], topIncumbents[], strategicInsights[], fetchedAt }.",
     _meta: {
       surface: "both",
       queryEligible: true,
@@ -103,7 +103,7 @@ export const TOOLS = [
         supportsBulk: false,
         recommendedBatchTools: ["analyze_competitive_landscape"],
         notes:
-          "Single USASpending API call per invocation. For full market picture, prefer analyze_competitive_landscape which bundles incumbents + agency spend + market size in one call.",
+          "For full market picture, prefer analyze_competitive_landscape which bundles incumbents + agency spend + market size in one call.",
       },
     },
     inputSchema: inputSchemaFor(ARG_SCHEMA.detect_incumbents),
@@ -201,7 +201,7 @@ export const TOOLS = [
         supportsBulk: true,
         recommendedBatchTools: ["analyze_competitive_landscape"],
         notes:
-          "Makes 3 parallel USASpending API calls (spend-by-agency, spend-by-contractor, active contracts). Preferred batch tool — use instead of multiple detect_incumbents calls.",
+          "Preferred batch tool — use instead of multiple detect_incumbents calls for whole-market analysis.",
       },
     },
     inputSchema: inputSchemaFor(ARG_SCHEMA.analyze_competitive_landscape),
@@ -247,7 +247,7 @@ export const TOOLS = [
               contractorName: { type: "string" },
               totalWonUsd: { type: "number" },
               contractCount: { type: "number" },
-              recipientId: { type: "string", description: "USASpending recipient ID for drill-down" },
+              recipientId: { type: "string", description: "Internal recipient ID for drill-down" },
             },
             required: ["contractorName", "totalWonUsd", "contractCount"],
           },

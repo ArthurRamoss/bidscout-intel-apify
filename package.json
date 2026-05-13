@@ -1,7 +1,7 @@
 {
   "name": "bidscout-intel-apify",
   "version": "1.1.0",
-  "description": "Apify Actor + MCP server for federal contract intelligence. Incumbent detection, opportunity search, and competitive landscape analysis via USASpending and SAM.gov.",
+  "description": "Apify Actor + MCP server for federal contract intelligence. Incumbent detection, opportunity search, and competitive landscape analysis.",
   "type": "module",
   "main": "dist/server.js",
   "scripts": {
@@ -17,8 +17,6 @@
     "federal-contracts",
     "govtech",
     "incumbent-detection",
-    "usaspending",
-    "sam-gov",
     "government-contracting"
   ],
   "author": "Ramos",

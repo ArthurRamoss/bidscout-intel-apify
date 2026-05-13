@@ -1,6 +1,6 @@
 {
     "title": "BidScout Federal Contracts Intelligence",
-    "description": "Analyze federal procurement opportunities, detect incumbent contractors, and map competitive landscapes using USASpending and SAM.gov data.",
+    "description": "Analyze federal procurement opportunities, detect incumbent contractors, and map competitive landscapes.",
     "type": "object",
     "schemaVersion": 1,
     "properties": {
@@ -11,9 +11,9 @@
             "editor": "select",
             "enum": ["search_opportunities", "detect_incumbents", "competitive_landscape"],
             "enumTitles": [
-                "Search Federal Opportunities (SAM.gov)",
-                "Detect Incumbent Contractors (USASpending)",
-                "Analyze Competitive Landscape (USASpending)"
+                "Search Federal Opportunities",
+                "Detect Incumbent Contractors",
+                "Analyze Competitive Landscape"
             ],
             "default": "search_opportunities"
         },

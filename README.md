@@ -1,6 +1,6 @@
 # bidscout-intel-apify
 
-An Apify Actor that exposes federal contract intelligence (SAM.gov + USASpending) as both:
+An Apify Actor that exposes federal contract intelligence as both:
 - a REST API (`POST /search`, `POST /incumbents`, `POST /landscape`), and
 - a native **MCP server** (`POST /mcp`) — pluggable into Claude Desktop, Cursor, and any other MCP client.
 
@@ -19,9 +19,7 @@ src/
 │   ├── search-opportunities.ts
 │   ├── detect-incumbents.ts
 │   └── competitive-landscape.ts
-├── api/
-│   ├── sam-gov.ts
-│   └── usaspending.ts
+├── api/                       Internal data-source clients (proprietary)
 ├── utils/
 │   ├── scoring.ts       Recompete probability formula
 │   ├── date-helpers.ts
