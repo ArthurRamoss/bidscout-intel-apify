@@ -30,7 +30,7 @@ Comprehensive market intelligence: total market size, top agencies by spend, top
 | `tool-call-incumbents` | **$0.75** | One incumbent-detection run with proprietary recompete scoring (vs $25K/yr legacy = ~1000× cheaper) |
 | `tool-call-landscape` | **$0.12** | One landscape briefing with aggregated market intelligence |
 
-You can set `maxTotalChargeUsd` when starting a run; the Actor returns HTTP `402` (or an MCP error) once the cap is hit.
+Monitor your spend in real time from the Apify Console billing dashboard. The Actor returns HTTP `402` (or an MCP error) if the platform reports a per-event budget cap was reached.
 
 ## How to use it
 
