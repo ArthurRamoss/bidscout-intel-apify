@@ -1,5 +1,7 @@
 # BidScout Federal Contracts Intelligence
 
+> **Unofficial.** BidScout is an independent third-party tool. It is **not affiliated with, endorsed by, or sponsored by** the U.S. federal government, any U.S. government agency, or any third-party data provider whose public records may be referenced. All trademarks and service marks are the property of their respective owners.
+
 Turn federal government contract data into actionable competitive intelligence. BidScout aggregates and enriches authoritative federal procurement data so government contractors can find opportunities, identify incumbents, and map competitive landscapes — at a fraction of legacy provider pricing.
 
 This Actor runs as a **persistent HTTP API** (Standby mode) and **also speaks the Model Context Protocol** — connect it directly to Claude Desktop, Cursor, or any MCP client.
