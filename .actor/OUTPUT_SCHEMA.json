@@ -1,0 +1,13 @@
+{
+    "actorOutputSchemaVersion": 1,
+    "title": "BidScout output",
+    "description": "Tool results pushed to the default dataset (one row per run in batch mode; Standby/MCP runs do not write to the dataset). Each row carries a 'tool' discriminator and the structured payload defined in the dataset schema.",
+    "properties": {
+        "results": {
+            "type": "string",
+            "title": "Run results",
+            "description": "Tool results pushed to the default dataset (see Dataset tab for the typed schema and pivoted views)",
+            "template": "{{links.apiDefaultDatasetUrl}}/items"
+        }
+    }
+}

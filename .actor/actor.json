@@ -9,6 +9,7 @@
     "dockerfile": "../Dockerfile",
     "readme": "./ACTOR.md",
     "input": "./INPUT_SCHEMA.json",
+    "output": "./OUTPUT_SCHEMA.json",
     "storages": {
         "dataset": "./DATASET_SCHEMA.json"
     },

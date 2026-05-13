@@ -1,15 +1,256 @@
 {
     "actorSpecification": 1,
-    "fields": {},
+    "fields": {
+        "type": "object",
+        "properties": {
+            "tool": {
+                "type": "string",
+                "description": "Which tool produced this row: search_federal_opportunities | detect_incumbents | analyze_competitive_landscape"
+            },
+            "fetchedAt": {
+                "type": "string",
+                "format": "date-time",
+                "description": "ISO 8601 timestamp when the result was generated"
+            },
+            "query": {
+                "type": "object",
+                "description": "Echo of the input parameters used to generate this row"
+            },
+            "totalRecords": {
+                "type": "integer",
+                "description": "(search) Total opportunities matching the search criteria"
+            },
+            "opportunities": {
+                "type": "array",
+                "description": "(search) Federal contract opportunities returned",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "noticeId": { "type": "string" },
+                        "title": { "type": "string" },
+                        "solicitationNumber": { "type": "string" },
+                        "agency": { "type": "string" },
+                        "postedDate": { "type": "string", "format": "date-time" },
+                        "type": { "type": "string" },
+                        "responseDeadline": { "type": "string", "format": "date-time" },
+                        "naicsCode": { "type": "string" },
+                        "setAside": { "type": "string" },
+                        "placeOfPerformance": { "type": "string" },
+                        "samLink": { "type": "string", "format": "uri" }
+                    }
+                }
+            },
+            "searchSummary": {
+                "type": "string",
+                "description": "(search) Natural-language summary of the results"
+            },
+            "totalContractsFound": {
+                "type": "integer",
+                "description": "(incumbents) Total contracts found before expiration filter"
+            },
+            "totalValueUsd": {
+                "type": "number",
+                "description": "(incumbents) Sum of expiring contract values in USD"
+            },
+            "expiringContracts": {
+                "type": "array",
+                "description": "(incumbents) Expiring contracts ranked by recompete probability score",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "contractId": { "type": "string" },
+                        "title": { "type": "string" },
+                        "incumbentName": { "type": "string" },
+                        "awardAmountUsd": { "type": "number" },
+                        "awardingAgency": { "type": "string" },
+                        "awardingSubAgency": { "type": "string" },
+                        "startDate": { "type": "string", "format": "date-time" },
+                        "endDate": { "type": "string", "format": "date-time" },
+                        "daysUntilExpiration": { "type": "integer" },
+                        "recompeteScore": {
+                            "type": "number",
+                            "description": "0-100 proprietary score: proximity (40) + value (30) + duration (30)"
+                        },
+                        "naicsCode": { "type": "string" },
+                        "contractType": { "type": "string" }
+                    }
+                }
+            },
+            "topIncumbents": {
+                "type": "array",
+                "description": "(incumbents) Top contractors aggregated by total expiring value",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "name": { "type": "string" },
+                        "totalValueUsd": { "type": "number" },
+                        "contractCount": { "type": "integer" },
+                        "avgRecompeteScore": { "type": "number" }
+                    }
+                }
+            },
+            "strategicInsights": {
+                "type": "array",
+                "description": "Actionable observations distilled from the data",
+                "items": { "type": "string" }
+            },
+            "marketOverview": {
+                "type": "object",
+                "description": "(landscape) Market-level aggregates",
+                "properties": {
+                    "totalContractValueUsd": { "type": "number" },
+                    "totalContractCount": { "type": "integer" },
+                    "averageContractValueUsd": { "type": "number" }
+                }
+            },
+            "topAgencies": {
+                "type": "array",
+                "description": "(landscape) Top federal agencies by contract spend",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "agencyName": { "type": "string" },
+                        "totalSpendUsd": { "type": "number" },
+                        "agencyCode": { "type": "string" }
+                    }
+                }
+            },
+            "topContractors": {
+                "type": "array",
+                "description": "(landscape) Top contractors by contract value won",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "contractorName": { "type": "string" },
+                        "totalWonUsd": { "type": "number" },
+                        "contractCount": { "type": "integer" },
+                        "recipientId": { "type": "string" }
+                    }
+                }
+            },
+            "expiringContractsSummary": {
+                "type": "object",
+                "description": "(landscape) Summary of contracts expiring in the next 12 months",
+                "properties": {
+                    "count": { "type": "integer" },
+                    "totalValueUsd": { "type": "number" },
+                    "topExpiring": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "contractId": { "type": "string" },
+                                "incumbentName": { "type": "string" },
+                                "valueUsd": { "type": "number" },
+                                "agency": { "type": "string" },
+                                "endDate": { "type": "string", "format": "date-time" }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
     "views": {
         "overview": {
             "title": "Overview",
+            "description": "Headline numbers for each run",
             "transformation": {
-                "fields": ["action", "fetchedAt", "totalRecords", "totalContractsFound", "totalValueUsd"]
+                "fields": [
+                    "tool",
+                    "fetchedAt",
+                    "totalRecords",
+                    "totalContractsFound",
+                    "totalValueUsd"
+                ]
             },
             "display": {
                 "component": "table",
-                "properties": {}
+                "properties": {
+                    "tool": { "label": "Tool" },
+                    "fetchedAt": { "label": "Fetched at", "format": "date" },
+                    "totalRecords": { "label": "Opportunities (search)" },
+                    "totalContractsFound": { "label": "Contracts found (incumbents)" },
+                    "totalValueUsd": { "label": "Total value (USD)", "format": "number" }
+                }
+            }
+        },
+        "opportunities": {
+            "title": "Opportunities",
+            "description": "Detailed federal opportunities from `search_federal_opportunities` runs",
+            "transformation": {
+                "fields": ["opportunities"],
+                "flatten": ["opportunities"],
+                "unwind": ["opportunities"]
+            },
+            "display": {
+                "component": "table",
+                "properties": {
+                    "title": { "label": "Title" },
+                    "agency": { "label": "Agency" },
+                    "naicsCode": { "label": "NAICS" },
+                    "postedDate": { "label": "Posted", "format": "date" },
+                    "responseDeadline": { "label": "Deadline", "format": "date" },
+                    "setAside": { "label": "Set-aside" },
+                    "placeOfPerformance": { "label": "Location" },
+                    "samLink": { "label": "Source", "format": "link" }
+                }
+            }
+        },
+        "incumbents": {
+            "title": "Incumbents",
+            "description": "Expiring contracts ranked by recompete probability score",
+            "transformation": {
+                "fields": ["expiringContracts"],
+                "flatten": ["expiringContracts"],
+                "unwind": ["expiringContracts"]
+            },
+            "display": {
+                "component": "table",
+                "properties": {
+                    "incumbentName": { "label": "Incumbent" },
+                    "title": { "label": "Contract" },
+                    "awardingAgency": { "label": "Agency" },
+                    "awardAmountUsd": { "label": "Value (USD)", "format": "number" },
+                    "endDate": { "label": "Expires", "format": "date" },
+                    "daysUntilExpiration": { "label": "Days left" },
+                    "recompeteScore": { "label": "Recompete score" },
+                    "naicsCode": { "label": "NAICS" }
+                }
+            }
+        },
+        "landscape": {
+            "title": "Landscape — Top contractors",
+            "description": "Top contractors by total value won within a NAICS",
+            "transformation": {
+                "fields": ["topContractors"],
+                "flatten": ["topContractors"],
+                "unwind": ["topContractors"]
+            },
+            "display": {
+                "component": "table",
+                "properties": {
+                    "contractorName": { "label": "Contractor" },
+                    "totalWonUsd": { "label": "Total won (USD)", "format": "number" },
+                    "contractCount": { "label": "Contracts" }
+                }
+            }
+        },
+        "insights": {
+            "title": "Strategic insights",
+            "description": "Actionable observations across all run types",
+            "transformation": {
+                "fields": ["tool", "fetchedAt", "strategicInsights"],
+                "flatten": ["strategicInsights"],
+                "unwind": ["strategicInsights"]
+            },
+            "display": {
+                "component": "table",
+                "properties": {
+                    "tool": { "label": "Tool" },
+                    "fetchedAt": { "label": "Fetched at", "format": "date" },
+                    "strategicInsights": { "label": "Insight" }
+                }
             }
         }
     }
